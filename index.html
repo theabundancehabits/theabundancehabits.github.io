@@ -37,6 +37,11 @@
   .done { display:none; text-align:center; }
   .done h2 { font:700 40px "Kalam", cursive; color:var(--green); margin:0 0 6px; }
   .err { color:#b3261e; font-size:18px; min-height:1em; margin:0; }
+  .res { margin-top:44px; }
+  .res h3 { font:700 28px "Kalam", cursive; margin:0 0 10px; }
+  .res-link { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 14px; border:3px dashed var(--ink); border-radius:8px 12px 6px 10px; color:var(--ink); text-decoration:none; background:#fffaf0; }
+  .res-link:hover, .res-link:focus-visible { border-style:solid; }
+  .tag { flex:0 0 auto; font-size:15px; border:2px solid var(--faint); color:var(--faint); border-radius:999px; padding:0 10px; }
   nav { margin-top:40px; text-align:center; }
   nav p { margin:0 0 8px; }
   nav a { color:var(--ink); margin:0 8px; }
@@ -61,6 +66,7 @@
     <form id="f" novalidate>
       <input name="first_name" type="text" placeholder="First name" autocomplete="given-name" aria-label="First name">
       <input name="email_address" type="email" placeholder="Your email" autocomplete="email" required aria-label="Email">
+      <input name="fields[source]" type="hidden" id="src" value="direct">
       <button id="b" type="submit">Send me the challenge</button>
       <p class="err" id="err" role="alert"></p>
     </form>
@@ -73,17 +79,28 @@
     <a class="btn" href="7-Day-Money-Habits-Challenge.pdf" download>Download the PDF</a>
   </section>
 
+  <section class="res" aria-labelledby="res-h">
+    <h3 id="res-h">Want to start a side business?</h3>
+    <a class="res-link" href="https://shopify.pxf.io/c/7684674/1061744/13624" target="_blank" rel="sponsored noopener noreferrer">
+      <span>Try Shopify, 3 months for $1/month</span><span class="tag">Ad</span>
+    </a>
+    <p class="small">Ad · Affiliate link: if you sign up, I may earn a commission at no extra cost to you.</p>
+  </section>
+
   <nav>
     <p>One money habit a day:</p>
     <a href="https://www.instagram.com/theabundancehabits/">Instagram</a>
     <a href="https://www.tiktok.com/@theabundancehabits">TikTok</a>
-    <a href="https://www.youtube.com/channel/UCX1HO7T1Rwy3IKUMqQdKDwA">YouTube</a>
-    <a href="https://www.facebook.com/1216481568224372">Facebook</a>
+    <a href="https://www.youtube.com/@TheAbundanceHabits">YouTube</a>
+    <a href="https://www.facebook.com/profile.php?id=61593573670551">Facebook</a>
   </nav>
-  <footer>Educational only, not financial advice. This challenge is about habits and mindset and does not recommend any investment, product or financial service.</footer>
+  <footer>Educational only, not financial advice. This page is about habits and mindset and does not recommend any investment or financial service. Links marked Ad are affiliate links. Your email is only used to send the challenge and the weekly habit email.</footer>
 </main>
 <script>
   const f = document.getElementById('f'), b = document.getElementById('b'), err = document.getElementById('err');
+  // Which platform sent this visitor (?ref=ig|tt|yt|fb|nl), saved on the subscriber in Kit
+  const ref = (new URLSearchParams(location.search).get('ref') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 20);
+  if (ref) document.getElementById('src').value = ref;
   f.addEventListener('submit', async (e) => {
     e.preventDefault(); err.textContent = '';
     const email = f.email_address.value.trim();
